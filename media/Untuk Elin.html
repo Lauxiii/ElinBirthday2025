@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Untuk Elin 💖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ===== THEME (dark & light) ===== */
+    :root[data-theme="dark"]{
+      --bg:#0b0a0f; --text:#ffffff; --muted:rgba(229,231,235,.85);
+      --card:rgba(255,255,255,0.06); --border:rgba(255,255,255,0.12);
+      --accent:#fb7185; --accent2:#a21caf; --accent-contrast:#000;
+      --glass-grad: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+    }
+    :root[data-theme="light"]{
+      --bg:#ffffff; --text:#111827; --muted:rgba(55,65,81,.9);
+      --card:rgba(0,0,0,0.04); --border:rgba(0,0,0,0.12);
+      --accent:#e11d48; --accent2:#7c3aed; --accent-contrast:#fff;
+      --glass-grad: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.02));
+    }
+    body{ background:var(--bg); color:var(--text); }
+    .text-muted{ color:var(--muted); }
+    .glass{ background:var(--card); backdrop-filter: blur(8px); border:1px solid var(--border); }
+    .btn-accent{ background:var(--accent); color:var(--accent-contrast); }
+    .btn-accent:hover{ filter:brightness(1.05); }
+    .ring-accent{ box-shadow: 0 0 0 2px var(--accent) inset; }
+
+    /* floating hearts */
+    @keyframes float-heart { 0% { transform: translateY(0) scale(1); opacity:.6;} 100% {transform: translateY(-120vh) scale(1.3); opacity:0;} }
+    .animate-float-heart { animation: float-heart 12s linear infinite; }
+    @keyframes fall { 0%{ transform: translateY(-10vh) rotate(0deg); opacity:1;} 100%{ transform: translateY(120vh) rotate(360deg); opacity:0;} }
+
+    /* romance gradient bg for gate */
+    .romance-bg{ background: radial-gradient(ellipse at top, rgba(251,113,133,.22), transparent 60%),
+                             radial-gradient(ellipse at bottom, rgba(162,28,175,.18), transparent 60%),
+                             linear-gradient(to bottom, rgba(251,113,133,.35), rgba(162,28,175,.35)); }
+      /* wobble animation */
+    @keyframes wobble { 0%{transform:rotate(-1deg) translateY(0)} 50%{transform:rotate(1.5deg) translateY(-2px)} 100%{transform:rotate(-1deg) translateY(0)} }
+    .wobble { animation: wobble 2.2s ease-in-out infinite; }
+  </style>
+  <!--
+    Cara pakai:
+    1) Simpan file ini sebagai "elin-ultah.html".
+    2) Double‑click untuk buka. Klik ikon 🌗 untuk ganti dark/light.
+    3) Edit CONFIG di bawah (nama, tanggal, musik, foto, video, hadiah).
+  -->
+</head>
+<body class="min-h-screen selection:bg-rose-400/60 selection:text-white">
+  <script>
+    // ============== CONFIG ==============
+    /**
+     * Contoh penempatan file lokal (biar gampang tinggal taruh):
+     *   ./media/music/lagu-elin.mp3
+     *   ./media/video/elin-video-1.mp4
+     *   ./media/video/elin-video-1-cover.jpg (opsional)
+     *   ./media/gallery/01.jpg ... 10.jpg
+     * Ganti path di CONFIG sesuai nama file kamu (pakai nama sederhana).
+     */
+    const CONFIG = {
+      myName: 'Luqman',
+      herName: 'Elin',
+      specialDateISO: '2025-10-21T00:00:00+07:00',
+      songUrl: './media/music/lagu-elin.mp3',
+      photos: [
+        './media/gallery/01.jpg',
+        './media/gallery/02.jpg',
+        './media/gallery/03.jpg',
+      ],
+      videos: [
+        { title: 'Video Khusus Untuk Elin', url: './media/video/elin-video-1.mp4', cover: './media/video/elin-video-1-cover.jpg' }
+      ],
+      openingTitle: 'untukkk sayangggkuuu elinnn',
+      openingMessage: 'untukkk elinnn yangg palinggg aku sayangggg,\nselamattt yaaa sayangggkuuu karenaaa berhasilll membukaaa websitee iniii yangg passwordnya sangatt sulittt sekaliii,\nuntukkk ituuu akuuu sangattt mengapresiasinyaaa,\niniii akuuu adaaa laguuu yanggg relate samaaa kitaaaa, tapiii sebelummm ituuu\nhappy birthday, my favorite person! :)',
+      loveLetter: 'Teruntuk kamu: terima kasih sudah jadi rumah, pelabuhan, juga semangatku. Semoga setiap langkahmu ringan dan setiap mimpimu dekat. Aku sayang kamu—selalu.',
+      reasons: [
+        'sayang bisa dipercaya',
+        'sayang satu-satunya safe zoneku',
+        'perhatian tanpa diminta',
+        'mau belajar bareng',
+        'senyum yang menghangatkan',
+        'nemenin pas susah & senang',
+        'ngobrolnya bikin lupa waktu',
+        'suka hal hal kecil',
+        'punya mimpi hangat',
+        'dan muasuiiiiii buanyakkk nyakkk nyakkk luuuaaaaguiiiiiii'
+      ],
+      gate: {
+        statement: 'haloo sayangggkuuu, ututututuuu mau masuk ke website ini yaaa, sebelum ituuu jawab duluuu yaaa, ini pertanyaannyaa sangatlahh sulittt hihihii :>',
+        question: 'apaaa hal yangg palinggg disukaiii dannn disayangiiii samaaa luqmannn?',
+        answers: [/^elin{3}$/i],
+        hint: 'n nya ada tigaaa, kaloo masihh bingunggg nyerahhh ajaaa gapapaa terusss tanyaaa ke cowo kesayanganmuuu xixixiiii'
+      },
+      gift: { label: 'Hadiah Khusus Untuk Elin 🎁', url: 'https://example.com/hadiah-elin' }
+    };
+
+    // ============== HELPERS ==============
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+    const fmtTime = (ms) => { const t=Math.max(0,Math.floor(ms/1000)); const d=Math.floor(t/86400); const h=Math.floor((t%86400)/3600); const m=Math.floor((t%3600)/60); const s=t%60; return {d,h,m,s}; };
+    function spawnHearts(){ const root=document.createElement('div'); root.className='pointer-events-none fixed inset-0 z-[60] overflow-hidden'; document.body.appendChild(root); for(let i=0;i<40;i++){ const span=document.createElement('span'); span.textContent='❤️'; Object.assign(span.style,{position:'absolute',left:Math.random()*100+'vw',top:'-2rem',fontSize:16+Math.random()*24+'px',animation:`fall ${4+Math.random()*2}s ease-in forwards`,transform:`translateX(${(Math.random()-.5)*50}px)`}); root.appendChild(span);} setTimeout(()=>document.body.removeChild(root),7000);}    
+  </script>
+
+  <!-- ===== Theme Toggle (global) ===== -->
+  <button id="themeToggle" class="fixed top-4 right-4 z-50 px-3 py-2 rounded-xl glass text-sm" title="Ganti mode">🌗
+  </button>
+
+  <!-- ========================= GATE (with statement first) ========================= -->
+  <section id="gate" class="min-h-screen romance-bg flex items-center justify-center p-6 relative overflow-hidden">
+    <div aria-hidden class="pointer-events-none absolute inset-0 overflow-hidden">
+      <script>(function(){ const p=document.currentScript.parentElement; for(let i=0;i<12;i++){ const d=document.createElement('div'); d.textContent='♥'; d.className='absolute animate-float-heart'; d.style.color='rgba(255,255,255,.3)'; d.style.left=((i*8)%100)+'%'; d.style.bottom=(-10 - i*8)+'%'; d.style.animationDelay=(i*.8)+'s'; d.style.fontSize=(16+(i%5)*8)+'px'; p.appendChild(d);} })();</script>
+    </div>
+
+    <div class="max-w-lg w-full text-center relative z-10">
+      <h1 class="text-4xl font-bold mb-6">Pintu Rahasia</h1>
+      <div class="rounded-2xl glass p-6 shadow-[0_10px_40px_rgba(0,0,0,.35)]">
+        <div id="gateStatement" class="text-muted mb-4">...</div>
+        <button id="btnStart" class="w-full px-5 py-3 rounded-xl btn-accent font-semibold">Mulai Tantangan ✨</button>
+
+        <form id="gateForm" class="mt-6 hidden text-left">
+          <label class="text-sm">Pertanyaan:</label>
+          <div id="gateQuestion" class="text-base mb-3"></div>
+          <div class="flex gap-2">
+            <input id="gateInput" class="flex-1 rounded-xl px-4 py-3 bg-white/90 text-neutral-900 placeholder-neutral-500 focus:outline-none" placeholder="Jawabanmu di sini" aria-label="Jawaban pertanyaan" required />
+            <button class="px-4 py-3 rounded-xl bg-black/80 hover:bg-black text-white font-semibold min-w-[56px]">🔓</button>
+          </div>
+          <div id="gateHint" class="hidden mt-3 text-sm"></div>
+          <div id="gateError" class="hidden mt-2 text-sm" style="color:#ffe4e6">Belum tepat, coba lagi ya 🥺</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= MAIN (ORDERED SECTIONS) ========================= -->
+  <main id="main" class="hidden">
+    <!-- 1. Kata untuk Elin -->
+    <section class="relative min-h-[70vh] flex items-center justify-center text-center p-6">
+      <div aria-hidden class="absolute inset-0" style="background: radial-gradient(ellipse at top, rgba(251,113,133,.18), transparent 60%);"></div>
+      <div class="relative z-10 max-w-3xl">
+        <h1 id="wobbleTitle" class="text-4xl sm:text-6xl font-black tracking-tight mb-2 wobble cursor-pointer select-none">untukkk sayangggkuuu elinnn</h1>
+        <p class="text-sm text-muted mb-4">klik tulisannya yaa ✨</p>
+        <div id="messageBlock" class="hidden space-y-2 text-lg text-muted leading-relaxed"></div>
+      </div>
+    </section>
+
+    <!-- 2. Musik ala Spotify (manual play) -->
+    <section class="py-12 px-6">
+      <div class="w-full max-w-2xl mx-auto rounded-2xl glass p-4 shadow-[0_10px_40px_rgba(0,0,0,.35)]">
+        <div class="flex items-center gap-3">
+          <button id="btnPlay" class="p-3 rounded-xl bg-white/10 hover:bg-white/20" aria-label="Play/Pause">▶️</button>
+          <span class="text-muted">Musik untuk Elin</span>
+          <div class="ml-auto flex items-center gap-2 text-muted">
+            <span id="volIcon">🔊</span>
+            <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume" />
+          </div>
+        </div>
+        <div class="mt-3 h-28 rounded-xl overflow-hidden" style="background:var(--glass-grad)">
+          <canvas id="viz" class="w-full h-full"></canvas>
+        </div>
+        <audio id="audio" crossOrigin="anonymous" preload="auto"></audio>
+      </div>
+    </section>
+
+    <!-- 3. Surat cinta -->
+    <section class="py-12 px-6">
+      <div class="max-w-3xl mx-auto rounded-3xl glass p-8 shadow-[0_10px_40px_rgba(0,0,0,.35)]">
+        <h2 class="text-2xl font-bold mb-4">Surat Cinta</h2>
+        <p id="loveLetter" class="leading-relaxed"></p>
+      </div>
+    </section>
+
+    <!-- 4. 10 Alasan -->
+    <section class="py-12 px-6">
+      <h2 class="text-center text-2xl font-bold mb-8">10 Alasan Kenapa Aku Sayang Elin</h2>
+      <div id="reasons" class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
+    </section>
+
+    <!-- 5. Galeri -->
+    <section class="py-12 px-6">
+      <h2 class="text-center text-2xl font-bold mb-8">Galeri Kenangan</h2>
+      <div id="gallery" class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- 6. Video khusus Elin -->
+    <section class="py-12 px-6">
+      <h2 class="text-center text-2xl font-bold mb-8">Video Khusus Untuk Elin</h2>
+      <div id="videos" class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- 7. Hadiah -->
+    <section class="py-12 px-6">
+      <div class="max-w-xl mx-auto text-center">
+        <button id="btnGift" class="mx-auto px-6 py-4 rounded-2xl btn-accent font-bold shadow-[0_10px_40px_rgba(0,0,0,.35)] inline-flex items-center gap-2">🎁 <span id="giftLabel"></span></button>
+        <p class="text-sm text-muted mt-3">Ada hadiah kecil khusus untukmu ✨</p>
+      </div>
+    </section>
+
+    <footer class="py-12 text-center text-sm text-muted">
+      Dibuat dengan 💖 oleh <span id="me"></span> untuk <span id="her"></span>
+    </footer>
+  </main>
+
+  <!-- ===== Overlays ===== -->
+  <div id="videoOverlay" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-sm">
+    <button id="videoClose" class="absolute top-4 right-4 p-2 rounded-full glass" aria-label="Tutup">✖</button>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,.6)]">
+        <div id="preroll" class="absolute inset-0 bg-black flex items-center justify-center text-white text-3xl tracking-widest font-semibold">CINEMATIC</div>
+        <video id="videoPlayer" class="w-full h-full" controls preload="metadata" playsinline controlsList="nodownload"></video>
+        <div id="videoTitle" class="absolute bottom-3 left-4 right-4 text-white/90 text-sm sm:text-base truncate"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="giftModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur">
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="relative w-full max-w-md rounded-2xl glass p-6">
+        <button id="giftClose" class="absolute top-3 right-3 p-2 rounded-full glass" aria-label="Tutup">✖</button>
+        <div id="giftLock">
+          <h3 class="text-xl font-bold mb-2">🔒 Kunci Hadiah</h3>
+          <p class="text-muted mb-4">Ketik kalimat sihirnya dulu ya 😉</p>
+          <input id="giftAnswer" placeholder="contoh: aku sayang kamu" class="w-full rounded-xl px-4 py-3 bg-white/10 border border-white/10 placeholder-white/40 focus:outline-none" />
+          <button id="giftOpen" class="mt-4 w-full px-4 py-3 rounded-xl btn-accent font-semibold" disabled>Buka 🎁</button>
+        </div>
+        <div id="giftOpenPanel" class="hidden">
+          <h3 class="text-xl font-bold mb-2">🎁 Selamat!</h3>
+          <p class="text-muted mb-4">Ini hadiah kecil untukmu. Semoga suka 💝</p>
+          <a id="giftLink" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center w-full px-4 py-3 rounded-xl btn-accent font-bold">Ambil Hadiah</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-2xl glass border border-white/10"></div>
+
+  <script>
+    // ===== Theme toggle =====
+    const themeBtn = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('elin-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    themeBtn.addEventListener('click', ()=>{
+      const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', cur);
+      localStorage.setItem('elin-theme', cur);
+    });
+
+    // ===== Init static content =====
+    $('#giftLabel').textContent = CONFIG.gift.label;
+    $('#loveLetter').textContent = CONFIG.loveLetter;
+    $('#me').textContent = CONFIG.myName;
+    $('#her').textContent = CONFIG.herName;
+    $('#giftLink').setAttribute('href', CONFIG.gift.url);
+    $('#gateStatement').textContent = CONFIG.gate.statement;
+    $('#gateQuestion').textContent = CONFIG.gate.question;
+
+    // opening wobble title + reveal on click
+    const wobbleTitle = $('#wobbleTitle');
+    const messageBlock = $('#messageBlock');
+    const clickHint = document.querySelector('#wobbleTitle + p');
+    wobbleTitle.textContent = CONFIG.openingTitle;
+    function showOpening(){
+      messageBlock.innerHTML = CONFIG.openingMessage.split('\n').map(line=>`<p>${line}</p>`).join('');
+      messageBlock.classList.remove('hidden');
+      clickHint && clickHint.remove();
+    }
+    wobbleTitle.addEventListener('click', showOpening);
+
+    // reasons
+    const reasonsWrap = $('#reasons');
+    CONFIG.reasons.forEach((r)=>{
+      const div = document.createElement('div');
+      div.className = 'rounded-2xl glass p-4 text-center border border-[color:var(--border)]';
+      div.innerHTML = `<div class="mb-2">💗</div><div class="text-sm">${r}</div>`;
+      reasonsWrap.appendChild(div);
+    });
+
+    // gallery
+    const gal = $('#gallery');
+    CONFIG.photos.forEach((src)=>{ const img=document.createElement('img'); img.src=src; img.alt='Foto kenangan'; img.className='w-full h-64 object-cover rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,.35)]'; gal.appendChild(img); });
+
+    // videos
+    const vids = $('#videos');
+    CONFIG.videos.forEach((v)=>{
+      const btn=document.createElement('button');
+      btn.className='group relative aspect-video rounded-2xl overflow-hidden glass border border-[color:var(--border)] text-left hover:-translate-y-0.5 transition-transform';
+      btn.innerHTML=`<img src="${v.cover}" alt="${v.title}" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-3 left-3 right-12 font-semibold">${v.title}</div>
+        <div class="absolute bottom-3 right-3 p-2 rounded-full bg-white/20 backdrop-blur">🎬</div>`;
+      btn.addEventListener('click', ()=>openVideo(v.url, v.title));
+      vids.appendChild(btn);
+    });
+
+    // ===== Gate logic (with statement first) =====
+    const gateEl = $('#gate'); const mainEl=$('#main');
+    const gateForm = $('#gateForm'); const gateInput=$('#gateInput');
+    const gateHint=$('#gateHint'); const gateError=$('#gateError');
+    $('#btnStart').addEventListener('click',()=>{ gateForm.classList.remove('hidden'); $('#btnStart').classList.add('hidden'); });
+
+    function checkGate(v){ return CONFIG.gate.answers.some((r)=> r.test((v||'').trim())); }
+    function unlock(){ localStorage.setItem('gateSolved','1'); gateEl.classList.add('hidden'); mainEl.classList.remove('hidden'); spawnHearts(); showToast('Yeay! Kamu berhasil masuk 💖'); }
+    if (new URLSearchParams(location.search).get('dev') || localStorage.getItem('gateSolved')==='1') { unlock(); }
+
+    let tries=0;
+    gateForm.addEventListener('submit',(e)=>{ e.preventDefault(); const ok=checkGate(gateInput.value); if(ok){ unlock(); } else { tries++; gateError.classList.remove('hidden'); if(tries>=2){ gateHint.textContent = 'Hint: ' + CONFIG.gate.hint; gateHint.classList.remove('hidden'); } }});
+
+    // ===== Music + Spotify-like visualizer (manual play) =====
+    const audio = $('#audio'); const btnPlay=$('#btnPlay'); const vol=$('#vol'); const volIcon=$('#volIcon'); const viz=$('#viz'); const ctx2d=viz.getContext('2d');
+    audio.src = CONFIG.songUrl; audio.volume = parseFloat(vol.value);
+    let ac=null, analyser=null, source=null, rafId=null;
+    function resizeCanvas(){ const ratio=window.devicePixelRatio||1; const p=viz.parentElement; const w=p?p.clientWidth:600; const h=p?Math.max(80,p.clientHeight):120; viz.width=w*ratio; viz.height=h*ratio; viz.style.width=w+'px'; viz.style.height=h+'px'; ctx2d.setTransform(ratio,0,0,ratio,0,0);} resizeCanvas(); new ResizeObserver(resizeCanvas).observe(viz.parentElement||viz);
+    function draw(){ if(!analyser) return; const width=viz.width/(window.devicePixelRatio||1); const height=viz.height/(window.devicePixelRatio||1); const data=new Uint8Array(analyser.frequencyBinCount); function loop(){ analyser.getByteFrequencyData(data); ctx2d.clearRect(0,0,width,height); const barW=(width/data.length)*1.8; let x=0; for(let i=0;i<data.length;i+=2){ const v=data[i]/255; const bh=Math.max(2,v*height); const y=height-bh; const g=ctx2d.createLinearGradient(0,y,0,height); g.addColorStop(0,'rgba(255,255,255,.95)'); g.addColorStop(1,'rgba(255,255,255,.2)'); ctx2d.fillStyle=g; ctx2d.fillRect(x,y,barW,bh); x+=barW+2; } rafId=requestAnimationFrame(loop);} loop(); }
+    async function ensureAudioGraph(){ if(ac) return; const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; ac=new AC(); analyser=ac.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=.8; source=ac.createMediaElementSource(audio); source.connect(analyser); analyser.connect(ac.destination); draw(); }
+    btnPlay.addEventListener('click', async ()=>{ if(audio.paused){ try{ await ensureAudioGraph(); await audio.play(); btnPlay.textContent='⏸️'; }catch(e){} } else { audio.pause(); btnPlay.textContent='▶️'; } });
+    vol.addEventListener('input', ()=>{ audio.volume=parseFloat(vol.value); volIcon.textContent=(audio.volume===0?'🔇':'🔊'); });
+
+    // ===== Video overlay =====
+    const videoOverlay=$('#videoOverlay'); const videoPlayer=$('#videoPlayer'); const videoTitle=$('#videoTitle'); const preroll=$('#preroll');
+    $('#videoClose').addEventListener('click', closeVideo); window.addEventListener('keydown',(e)=> e.key==='Escape'&&closeVideo());
+    function openVideo(src,title){ preroll.classList.remove('hidden'); videoOverlay.classList.remove('hidden'); videoPlayer.src=src; videoTitle.textContent=title; videoPlayer.pause(); videoPlayer.currentTime=0; setTimeout(()=>{ preroll.classList.add('hidden'); videoPlayer.play().catch(()=>{}); },1500); }
+    function closeVideo(){ videoOverlay.classList.add('hidden'); videoPlayer.pause(); videoPlayer.currentTime=0; }
+
+    // ===== Gift modal =====
+    const giftModal=$('#giftModal'); const giftAnswer=$('#giftAnswer'); const giftOpenBtn=$('#giftOpen'); const giftLock=$('#giftLock'); const giftOpenPanel=$('#giftOpenPanel');
+    $('#btnGift').addEventListener('click', ()=> giftModal.classList.remove('hidden'));
+    $('#giftClose').addEventListener('click', ()=> giftModal.classList.add('hidden'));
+    function giftOk(){ return /^aku\s*sayang\s*kamu$/i.test((giftAnswer.value||'').trim()); }
+    giftAnswer.addEventListener('input', ()=>{ giftOpenBtn.disabled = !giftOk(); });
+    giftOpenBtn.addEventListener('click', ()=>{ if(!giftOk()) return; spawnHearts(); giftLock.classList.add('hidden'); giftOpenPanel.classList.remove('hidden'); });
+
+    // ===== Toast =====
+    const toast=$('#toast'); let toastTimer=null; function showToast(msg){ toast.textContent=msg; toast.classList.remove('hidden'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.add('hidden'),2500); }
+  </script>
+</body>
+</html>
